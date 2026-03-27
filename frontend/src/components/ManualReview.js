@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { STATUS_COLORS } from '../constants';
 import {
   Box,
   Typography,
@@ -33,7 +34,7 @@ function FaceBoxOverlay({ records, imageNaturalWidth, imageNaturalHeight, displa
   const scaleX = displayWidth / imageNaturalWidth;
   const scaleY = displayHeight / imageNaturalHeight;
 
-  const statusColors = { present: '#2e7d32', unknown: '#e65100', absent: '#c62828' };
+  const statusColors = STATUS_COLORS;
 
   return (
     <>
@@ -171,7 +172,7 @@ function ManualReview() {
     );
   }
 
-  const statusColors = { present: '#2e7d32', unknown: '#e65100', absent: '#c62828' };
+  const statusColors = STATUS_COLORS;
 
   return (
     <div className="review-container">

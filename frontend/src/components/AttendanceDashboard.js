@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { STATUS_COLORS } from '../constants';
 import {
   Box,
   Typography,
@@ -31,12 +32,11 @@ import { format } from 'date-fns';
 import './AttendanceDashboard.css';
 
 function StatusChip({ status }) {
-  const colors = { present: '#2e7d32', absent: '#c62828', unknown: '#e65100' };
   return (
     <Chip
       label={status}
       size="small"
-      sx={{ bgcolor: colors[status] || '#757575', color: 'white', textTransform: 'capitalize' }}
+      sx={{ bgcolor: STATUS_COLORS[status] || '#757575', color: 'white', textTransform: 'capitalize' }}
     />
   );
 }
@@ -58,10 +58,10 @@ function SessionRow({ session }) {
           <Chip label={session.total_students ?? '—'} size="small" variant="outlined" />
         </TableCell>
         <TableCell>
-          <Chip label={session.present_count ?? 0} size="small" sx={{ bgcolor: '#2e7d32', color: 'white' }} />
+          <Chip label={session.present_count ?? 0} size="small" sx={{ bgcolor: STATUS_COLORS.present, color: 'white' }} />
         </TableCell>
         <TableCell>
-          <Chip label={session.absent_count ?? 0} size="small" sx={{ bgcolor: '#c62828', color: 'white' }} />
+          <Chip label={session.absent_count ?? 0} size="small" sx={{ bgcolor: STATUS_COLORS.absent, color: 'white' }} />
         </TableCell>
         <TableCell>
           <Tooltip title="Manual Review">

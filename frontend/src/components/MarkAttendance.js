@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { STATUS_COLORS } from '../constants';
 import { useDropzone } from 'react-dropzone';
 import {
   Box,
@@ -225,9 +226,9 @@ function MarkAttendance() {
               Results – Session #{sessionResult.id}
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-              <Chip label={`✓ Present: ${sessionResult.present_count ?? 0}`} sx={{ bgcolor: '#2e7d32', color: 'white' }} />
-              <Chip label={`✗ Absent: ${sessionResult.absent_count ?? 0}`} sx={{ bgcolor: '#c62828', color: 'white' }} />
-              <Chip label={`? Unknown: ${sessionResult.unknown_count ?? 0}`} sx={{ bgcolor: '#e65100', color: 'white' }} />
+              <Chip label={`✓ Present: ${sessionResult.present_count ?? 0}`} sx={{ bgcolor: STATUS_COLORS.present, color: 'white' }} />
+              <Chip label={`✗ Absent: ${sessionResult.absent_count ?? 0}`} sx={{ bgcolor: STATUS_COLORS.absent, color: 'white' }} />
+              <Chip label={`? Unknown: ${sessionResult.unknown_count ?? 0}`} sx={{ bgcolor: STATUS_COLORS.unknown, color: 'white' }} />
             </Box>
 
             <Paper>
@@ -248,12 +249,7 @@ function MarkAttendance() {
                           label={r.status}
                           size="small"
                           sx={{
-                            bgcolor:
-                              r.status === 'present'
-                                ? '#2e7d32'
-                                : r.status === 'absent'
-                                ? '#c62828'
-                                : '#e65100',
+                            bgcolor: STATUS_COLORS[r.status] || STATUS_COLORS.unknown,
                             color: 'white',
                           }}
                         />

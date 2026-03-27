@@ -59,7 +59,7 @@ check_docker_running() {
     if docker info &>/dev/null 2>&1; then
         pass "Docker daemon is running"
     else
-        fail "Docker daemon is running" "Start Docker Desktop and try again"
+        fail "Docker daemon is not running" "Start Docker Desktop and try again"
     fi
 }
 
@@ -89,13 +89,13 @@ check_containers() {
     if [[ "$backend_status" == *"running"* ]] || [[ "$backend_status" == *"Up"* ]]; then
         pass "Backend container is running"
     else
-        fail "Backend container is running" "Run: docker-compose up -d"
+        fail "Backend container is not running" "Run: docker-compose up -d"
     fi
 
     if [[ "$frontend_status" == *"running"* ]] || [[ "$frontend_status" == *"Up"* ]]; then
         pass "Frontend container is running"
     else
-        fail "Frontend container is running" "Run: docker-compose up -d"
+        fail "Frontend container is not running" "Run: docker-compose up -d"
     fi
 }
 
