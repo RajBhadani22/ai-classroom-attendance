@@ -51,7 +51,7 @@ section() {
 check_docker_running() {
     section "Docker"
     if ! command -v docker &>/dev/null; then
-        fail "Docker is installed" "Install Docker Desktop: https://www.docker.com/products/docker-desktop"
+        fail "Docker not installed" "Install Docker Desktop: https://www.docker.com/products/docker-desktop"
         return
     fi
     pass "Docker binary found"
