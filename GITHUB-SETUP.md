@@ -127,3 +127,26 @@ Collaborators copy and fill in their values:
 ```bash
 cp .env.example .env
 ```
+
+---
+
+## GitHub Pages (Frontend Hosting)
+
+This repository includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and deploys the React frontend to GitHub Pages on every push to `main`.
+
+**To enable GitHub Pages for your fork:**
+
+1. Go to your repository **Settings → Pages**
+2. Under **Source**, select **GitHub Actions**
+3. Push to `main` — the workflow will build and deploy automatically
+
+The frontend will be available at:
+```
+https://<your-username>.github.io/ai-classroom-attendance/
+```
+
+> **Note:** The static frontend hosted on GitHub Pages connects to the backend API at `http://localhost:8000` by default. API calls will fail without a running backend. This is expected for demo/preview purposes.
+
+### Dependency Notes
+
+`frontend/package.json` includes an `overrides` entry for `fork-ts-checker-webpack-plugin`'s `ajv` dependency. This resolves a peer dependency conflict where `react-scripts` installs `ajv@^8.x` at the top level while the `fork-ts-checker-webpack-plugin` bundled `ajv-keywords@3.x` requires `ajv@^6.x`. The override ensures both versions co-exist without conflicts.
