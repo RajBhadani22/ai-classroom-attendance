@@ -90,7 +90,7 @@ async def create_session(
     db.flush()  # get session.id without committing
 
     # Fetch active students
-    students = db.query(Student).filter(Student.is_active == True).all()
+    students = db.query(Student).filter(Student.is_active.is_(True)).all()
 
     # Run face recognition
     try:
@@ -212,7 +212,6 @@ def confirm_session(session_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Session has not been processed yet",
         )
-    session.processed = True  # already True, but explicit confirmation endpoint
     db.commit()
     logger.info("Session %d confirmed", session_id)
     return {"message": "Session confirmed", "session_id": session_id}

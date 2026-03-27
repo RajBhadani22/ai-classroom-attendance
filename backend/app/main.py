@@ -1,5 +1,6 @@
 import logging
 import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,13 +17,28 @@ logger = logging.getLogger(__name__)
 
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", "./uploads")
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: create tables and upload dirs
+    Base.metadata.create_all(bind=engine)
+    logger.info("Database tables created / verified")
+    for subdir in ("students", "sessions"):
+        path = os.path.join(UPLOAD_DIR, subdir)
+        os.makedirs(path, exist_ok=True)
+    logger.info("Upload directories ready at '%s'", UPLOAD_DIR)
+    yield
+    # Shutdown: nothing to clean up for SQLite
+
+
 app = FastAPI(
     title="AI Classroom Attendance",
     description="Automated classroom attendance system using face recognition",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
-# Wide-open CORS for development
+# Wide-open CORS for development – restrict origins in production
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,20 +46,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-async def startup_event():
-    # Create database tables
-    Base.metadata.create_all(bind=engine)
-    logger.info("Database tables created / verified")
-
-    # Ensure upload directories exist
-    for subdir in ("students", "sessions"):
-        path = os.path.join(UPLOAD_DIR, subdir)
-        os.makedirs(path, exist_ok=True)
-    logger.info("Upload directories ready at '%s'", UPLOAD_DIR)
-
 
 # Serve uploaded files as static assets
 os.makedirs(UPLOAD_DIR, exist_ok=True)

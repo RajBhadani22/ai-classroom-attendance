@@ -37,7 +37,7 @@ def create_student(payload: StudentCreate, db: Session = Depends(get_db)):
 
 @router.get("", response_model=List[StudentResponse])
 def list_students(db: Session = Depends(get_db)):
-    return db.query(Student).filter(Student.is_active == True).order_by(Student.name).all()
+    return db.query(Student).filter(Student.is_active.is_(True)).order_by(Student.name).all()
 
 
 @router.get("/{student_id}", response_model=StudentResponse)
@@ -54,7 +54,7 @@ async def upload_photos(
     files: List[UploadFile] = File(...),
     db: Session = Depends(get_db),
 ):
-    student = db.query(Student).filter(Student.id == student_id, Student.is_active == True).first()
+    student = db.query(Student).filter(Student.id == student_id, Student.is_active.is_(True)).first()
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
 

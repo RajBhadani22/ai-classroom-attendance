@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 from sqlalchemy import (
     Boolean, Column, Date, DateTime, Float, ForeignKey,
     Integer, String, Text
@@ -16,7 +16,7 @@ class Student(Base):
     roll_number = Column(String, unique=True, nullable=False, index=True)
     face_encodings = Column(Text, nullable=True)  # JSON-serialized list of encoding arrays
     photo_count = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     is_active = Column(Boolean, default=True)
 
     attendance_records = relationship("AttendanceRecord", back_populates="student")
@@ -36,7 +36,7 @@ class Class(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     subject = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     sessions = relationship("AttendanceSession", back_populates="class_")
 
@@ -49,7 +49,7 @@ class AttendanceSession(Base):
     date = Column(Date, nullable=False, default=date.today)
     image_path = Column(String, nullable=True)
     processed = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     class_ = relationship("Class", back_populates="sessions")
     records = relationship("AttendanceRecord", back_populates="session", cascade="all, delete-orphan")
@@ -65,7 +65,7 @@ class AttendanceRecord(Base):
     confidence = Column(Float, nullable=True)
     is_manual_override = Column(Boolean, default=False)
     face_location = Column(Text, nullable=True)  # JSON serialized [top, right, bottom, left]
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     session = relationship("AttendanceSession", back_populates="records")
     student = relationship("Student", back_populates="attendance_records")
