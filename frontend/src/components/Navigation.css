@@ -1,0 +1,12 @@
+.nav-title {
+  flex-grow: 1;
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
